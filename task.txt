@@ -1,0 +1,11 @@
+Design archive service that should  help Data Scientists to use that data for AI models training by providing functionality below:
+
+               a ) Get list all games (fixtures) count per sport(You can assume that sport is always first)
+
+TableTennis/204/9513029/Frames/20230118062143.png
+
+                   Def get_games_count_per_sport(sport:str)->int
+
+               b)  Get representative dataset for each sport : Fetch random X frames(100) for each sport from random  Y games(200)
+
+                Def get_representative_data(sportName:str,frameCount:int,fixturesCount:int)-> list[str]
