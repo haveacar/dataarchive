@@ -21,6 +21,12 @@ The Sports Archive Project is designed for efficient management and querying of 
    - Contains tests for `DataArchiveService`.
    - Ensures the accuracy and reliability of service functionalities.
 
+## Installation
+Before running the project, install the necessary dependencies:
+   ```
+   pip install -r requirements.txt
+   ```
+
 ## How to Run
 Place the Parquet data file in the project directory. Run `archive.py` with the following arguments for different functionalities:
 1. **Listing All Games**:
