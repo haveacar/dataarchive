@@ -1,5 +1,5 @@
 
-# README.md for Sports Archive Project (Updated with Additional Commands)
+# README.md for Sports Archive Project
 
 ## Project Overview
 The Sports Archive Project is designed for efficient management and querying of a large sports game dataset. It allows users to perform various operations such as listing all games, counting games per sport, and retrieving specific representative data.
