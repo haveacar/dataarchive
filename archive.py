@@ -2,6 +2,7 @@ import sys
 from controls import DataArchiveService
 from performance_decorator import timing_decorator
 
+
 def show_help_and_dog():
     help_message = (
         "Commands:\n"
