@@ -13,6 +13,11 @@ class DataArchiveService:
         self.clean_bad_columns()
 
     def _read_parquet_file(self, file_name: str) -> pd.DataFrame:
+        """
+        Reads a Parquet file and returns its contents as a pandas DataFrame.
+        :param file_name: The name of the Parquet file to be read.
+        :return:  A DataFrame containing the data from the Parquet file.
+        """
         file_path = os.path.join(os.path.dirname(__file__), file_name)
         try:
             return pd.read_parquet(file_path, engine='pyarrow')
@@ -22,16 +27,30 @@ class DataArchiveService:
 
     @property
     def games_list(self):
+        """
+        Returns a list of games.
+        :return: A list of games.
+        """
         if self._games_list is None:
             self._games_list = self._generate_games_list()
         return self._games_list
 
     def _generate_games_list(self) -> dict:
+        """
+        Generates a dictionary containing the count of sports in the DataFrame.
+        :return: A dictionary where the keys represent sports and the values
+        """
 
         sport_count = self.df['key'].str.split('/', n=1).str[0].str.strip().value_counts().to_dict()
         return sport_count
 
     def clean_bad_columns(self, clean_method='drop'):
+        """
+        Cleans the DataFrame by removing rows containing bad data or filling missing values
+        :param clean_method: The method to clean the DataFrame. Can be 'drop' to remove bad rows,
+        or 'fill' to fill missing values with zeros.
+        :return: None
+        """
         if self.df.empty or 'key' not in self.df.columns:
             print("DataFrame is empty or missing 'key' column. No cleaning performed.")
             return
@@ -46,11 +65,23 @@ class DataArchiveService:
             print("Invalid clean method specified. No cleaning performed.")
 
     def get_games_count_per_sport(self, sport: str) -> int:
+        """
+        Get the count of games for a specific sport category.
+        :param sport: The name of the sport category to retrieve game count for.
+        :return: The count of games for the specified sport category.
+        """
 
         sport_rows = self.df[self.df['key'].str.startswith(sport + '/')]
         return len(sport_rows)
 
     def get_representative_data(self, sportName: str, frameCount: int, fixturesCount: int) -> list[str]:
+        """
+        Get representative data for a specific sport category.
+        :param sportName: The name of the sport category to retrieve data for.
+        :param frameCount: The number of frames or data points to retrieve.
+        :param fixturesCount: The maximum number of fixtures to consider.
+        :return:
+        """
 
         # Filter the DataFrame for rows related to the specified sport
         sport_df = self.df[self.df['key'].str.startswith(sportName + '/')]
