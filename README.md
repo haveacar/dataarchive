@@ -50,7 +50,7 @@ Place the Parquet data file in the project directory. Run `archive.py` with the 
 Example Commands:
 - To count games for Tennis:
   ```
-  python archive.py -count Tennis
+  python archive.py -count tennis
   ```
 - To list all games:
   ```
@@ -58,7 +58,7 @@ Example Commands:
   ```
 - To display representative data for Tennis:
   ```
-  python archive.py -repr Tennis 100 200
+  python archive.py -repr tennis 100 200
   ```
 
 ## Development Environment
