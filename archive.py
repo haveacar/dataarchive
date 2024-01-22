@@ -41,3 +41,5 @@ def run(file_name: str, args):
 if __name__ == '__main__':
     FILE_NAME = 'inventory_lsports-dev_full_14_03_2023_sample1M.parquet'
     run(FILE_NAME, sys.argv)
+
+print()
