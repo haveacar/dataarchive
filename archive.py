@@ -18,9 +18,8 @@ def show_help_and_dog():
 def run(file_name: str, args):
     archive_service = DataArchiveService(file_name)
 
-    if '-all' in args:
-        print(archive_service.games_list)
-    elif '-count' in args:
+
+    if '-count' in args:
         sport_index = args.index('-count') + 1
         if sport_index < len(args):
             sport = args[sport_index]
@@ -42,3 +41,6 @@ def run(file_name: str, args):
 if __name__ == '__main__':
     FILE_NAME = 'inventory_lsports-dev_full_14_03_2023_sample1M.parquet'
     run(FILE_NAME, sys.argv)
+
+
+
