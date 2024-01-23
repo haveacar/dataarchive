@@ -29,19 +29,14 @@ Before running the project, install the necessary dependencies:
 
 ## How to Run
 Place the Parquet data file in the project directory. Run `archive.py` with the following arguments for different functionalities:
-1. **Listing All Games**:
-   ```
-   python archive.py -all
-   ```
-   This command lists all the games in the dataset.
 
-2. **Counting Games by Sport**:
+1. **Counting Games by Sport**:
    ```
    python archive.py -count [SPORT]
    ```
    Replace `[SPORT]` with the desired sport name to count the number of games for that sport.
 
-3. **Displaying Representative Data for a Sport**:
+2. **Displaying Representative Data for a Sport**:
    ```
    python archive.py -repr [SPORT] [FRAME COUNT] [FIXTURES COUNT]
    ```
@@ -51,10 +46,6 @@ Example Commands:
 - To count games for Tennis:
   ```
   python archive.py -count tennis
-  ```
-- To list all games:
-  ```
-  python archive.py -all
   ```
 - To display representative data for Tennis:
   ```
