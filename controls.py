@@ -1,16 +1,23 @@
 import os
 import random
 import sys
-
 import pandas as pd
 
 
 class DataArchiveService:
     def __init__(self, file_name: str):
-
+        # Initialize DataFrame
         self.df = self._read_parquet_file(file_name)
-        self._games_list = None
+
+        # Clean columns with none value
         self.clean_bad_columns()
+
+        # Extract sport and game ID from 'key' column
+        self.df['sport'] = self.df['key'].apply(lambda x: x.split('/')[0])
+        self.df['game_id'] = self.df['key'].apply(lambda x: x.split('/')[-3])
+
+        # Create a dictionary to store unique game IDs for each sport
+        self.sport_game_ids = self.df.groupby('sport')['game_id'].unique().to_dict()
 
     def _read_parquet_file(self, file_name: str) -> pd.DataFrame:
         """
@@ -24,25 +31,6 @@ class DataArchiveService:
         except (FileNotFoundError, ValueError, Exception) as e:
             print(f"Error reading Parquet file: {e}")
             return pd.DataFrame()
-
-    @property
-    def games_list(self):
-        """
-        Returns a list of games.
-        :return: A list of games.
-        """
-        if self._games_list is None:
-            self._games_list = self._generate_games_list()
-        return self._games_list
-
-    def _generate_games_list(self) -> dict:
-        """
-        Generates a dictionary containing the count of sports in the DataFrame.
-        :return: A dictionary where the keys represent sports and the values
-        """
-
-        sport_count = self.df['key'].str.split('/', n=1).str[0].str.strip().value_counts().to_dict()
-        return sport_count
 
     def clean_bad_columns(self, clean_method='drop'):
         """
@@ -70,9 +58,7 @@ class DataArchiveService:
         :param sport: The name of the sport category to retrieve game count for.
         :return: The count of games for the specified sport category.
         """
-
-        sport_rows = self.df[self.df['key'].str.startswith(sport + '/')]
-        return len(sport_rows)
+        return len(self.sport_game_ids.get(sport, []))
 
     def get_representative_data(self, sportName: str, frameCount: int, fixturesCount: int) -> list[str]:
         """
@@ -80,30 +66,24 @@ class DataArchiveService:
         :param sportName: The name of the sport category to retrieve data for.
         :param frameCount: The number of frames or data points to retrieve.
         :param fixturesCount: The maximum number of fixtures to consider.
-        :return:
+        :return: List of representative data frames.
         """
 
-        # Filter the DataFrame for rows related to the specified sport
-        sport_df = self.df[self.df['key'].str.startswith(sportName + '/')]
+        # Get unique game IDs for the sport from the pre-processed dictionary
+        unique_game_ids = self.sport_game_ids.get(sportName, [])
 
-        # Extracting the game IDs from the 'key' column and getting unique IDs
-        unique_game_ids = sport_df['key'].str.split('/').str[2].dropna().unique()
-
-        # Randomly select Y unique games, ensuring not to exceed the available count
+        # Randomly select games, ensuring not to exceed the available count
         selected_game_ids = random.sample(list(unique_game_ids), min(fixturesCount, len(unique_game_ids)))
 
-        selected_games_frames = []
-        representative_data = []
+        # Filter DataFrame for the selected games
+        filtered_df = self.df[(self.df['sport'] == sportName) & (self.df['game_id'].isin(selected_game_ids))]
 
-        for game_id in selected_game_ids:
-            # Filter DataFrame for the selected game
-            game_df = sport_df[sport_df['key'].str.contains(f'/{game_id}/')]
-            # get all game frames
-            game_frames = game_df['key'].values.tolist()
-            selected_games_frames.extend(game_frames)
+        # Get all representative keys
+        representative_data = filtered_df['key'].values.tolist()
 
-        if frameCount < len(selected_games_frames):
-            representative_data = random.sample(selected_games_frames, frameCount)
+        # Randomly select frames if necessary
+        if frameCount < len(representative_data):
+            representative_data = random.sample(representative_data, frameCount)
 
         return representative_data
 
