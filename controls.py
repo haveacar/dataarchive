@@ -94,10 +94,10 @@ class DataArchiveService:
         """Check if all game IDs are numeric and have a length greater than 5"""
 
         valid_format = self.df['game_id'].apply(lambda x: x.isnumeric() and len(x) > 5).all()
-        print(self.df['sport'].unique())
+        unique_sport_count = self.df.groupby('sport')['game_id'].nunique()
 
         if valid_format:
-            return "All game IDs are in the correct format."
+            return f"All game IDs are in the correct format.\n: {unique_sport_count} "
         else:
             return "Some game IDs are not in the correct format."
 
