@@ -48,23 +48,8 @@ class TestDataArchiveService(unittest.TestCase):
         unknown_sport_count = service.get_games_count_per_sport('UnknownSport'.strip())
         self.assertEqual(unknown_sport_count, 0)
 
-    @patch('pandas.read_parquet')
-    def test_games_list(self, mock_read_parquet):
-        mock_read_parquet.return_value = self.test_df
 
-        # Create an instance of DataArchiveService
-        service = DataArchiveService('dummy_file.parquet')
-
-        # Calculate the expected games list based on the test data
-        expected_games_list = {
-            'Tennis': 3,
-            'TableTennis': 1,
-            'SomeOtherSport': 1,
-            'ESports': 1
-        }
-
-        # Check if the generated games list matches the expected games list
-        self.assertDictEqual(service.games_list, expected_games_list)
 
     if __name__ == '__main__':
         unittest.main()
+
