@@ -42,6 +42,10 @@ Place the Parquet data file in the project directory. Run `archive.py` with the 
    ```
    Replace `[SPORT]`, `[FRAME COUNT]`, and `[FIXTURES COUNT]` with the desired sport name, frame count, and fixtures count, respectively. This command shows representative data for the specified sport.
 
+3. **Testing date processing**:
+   ```
+   python archive.py -test
+   ```
 Example Commands:
 - To count games for Tennis:
   ```
@@ -50,6 +54,10 @@ Example Commands:
 - To display representative data for Tennis:
   ```
   python archive.py -repr tennis 100 200
+  ```
+- Testing date processing:
+  ```
+  python archive.py -test
   ```
 
 ## Development Environment
