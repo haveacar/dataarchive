@@ -9,12 +9,12 @@ class DataArchiveService:
         # Initialize DataFrame
         self.df = self._read_parquet_file(file_name)
 
-        # Clean columns with none value
-        self.clean_bad_columns()
-
         # Extract sport and game ID from 'key' column
         self.df['sport'] = self.df['key'].apply(lambda x: x.split('/')[0])
         self.df['game_id'] = self.df['key'].apply(lambda x: x.split('/')[-3])
+
+        # Clean columns with none value
+        self.clean_bad_columns()
 
         # Create a dictionary to store unique game IDs for each sport
         self.sport_game_ids = self.df.groupby('sport')['game_id'].unique().to_dict()
@@ -42,6 +42,9 @@ class DataArchiveService:
         if self.df.empty or 'key' not in self.df.columns:
             print("DataFrame is empty or missing 'key' column. No cleaning performed.")
             return
+
+        # Remove rows where 'sport' is an empty string
+        self.df = self.df[self.df['sport'] != '']
 
         if clean_method == 'drop':
             self.df.dropna(axis=0, inplace=True)
@@ -86,6 +89,17 @@ class DataArchiveService:
             representative_data = random.sample(representative_data, frameCount)
 
         return representative_data
+
+    def check_game_id_format(self):
+        """Check if all game IDs are numeric and have a length greater than 5"""
+
+        valid_format = self.df['game_id'].apply(lambda x: x.isnumeric() and len(x) > 5).all()
+        print(self.df['sport'].unique())
+
+        if valid_format:
+            return "All game IDs are in the correct format."
+        else:
+            return "Some game IDs are not in the correct format."
 
 
 if __name__ == "__main__":

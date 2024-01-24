@@ -26,6 +26,7 @@ def run(file_name: str, args):
             print(archive_service.get_games_count_per_sport(sport.capitalize()))
         else:
             return show_help_and_dog()
+
     elif '-repr' in args:
         repr_index = args.index('-repr') + 1
         if repr_index + 2 < len(args):
@@ -33,6 +34,10 @@ def run(file_name: str, args):
             print(archive_service.get_representative_data(sport.capitalize(), int(start), int(end)))
         else:
             return show_help_and_dog()
+
+    elif '-test' in args:
+        print(archive_service.check_game_id_format())
+
     else:
         return show_help_and_dog()
 
