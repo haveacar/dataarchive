@@ -35,7 +35,7 @@ def run(file_name: str, args):
             return show_help_and_dog()
 
     elif '-test' in args:
-        print(archive_service.check_game_id_format())
+        print(archive_service.check_processing_data())
 
     else:
         return show_help_and_dog()
